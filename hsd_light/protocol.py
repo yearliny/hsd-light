@@ -16,7 +16,6 @@ Packet format
 
 from __future__ import annotations
 
-import struct
 from datetime import datetime
 from enum import IntEnum
 

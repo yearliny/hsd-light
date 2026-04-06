@@ -97,12 +97,16 @@ class HSDDevice:
         await self._client.connect()
         logger.info("Connected.")
 
-        await self._discover_characteristics()
-        await self._subscribe_notifications()
+        try:
+            await self._discover_characteristics()
+            await self._subscribe_notifications()
 
-        # Sync time on connect — same as the original mini program
-        await self.send(Command.time_sync())
-        logger.info("Time synced to device.")
+            # Sync time on connect — same as the original mini program
+            await self.send(Command.time_sync())
+            logger.info("Time synced to device.")
+        except Exception:
+            await self._client.disconnect()
+            raise
 
     async def disconnect(self) -> None:
         if self._client and self._client.is_connected:
@@ -153,14 +157,15 @@ class HSDDevice:
         if not self.is_connected:
             raise RuntimeError("Not connected to device.")
 
-        now = asyncio.get_event_loop().time()
+        loop = asyncio.get_running_loop()
+        now = loop.time()
         wait = self._last_write + WRITE_DEBOUNCE - now
         if wait > 0:
             await asyncio.sleep(wait)
 
         logger.debug("→ %s", data.hex())
         await self._client.write_gatt_char(self._write_char, data)
-        self._last_write = asyncio.get_event_loop().time()
+        self._last_write = loop.time()
 
     # ── Context manager ───────────────────────────────────────────────────
 
