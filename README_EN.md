@@ -51,6 +51,8 @@ hsd scan
 # Found: HSD Love Light  [AA:BB:CC:DD:EE:FF]
 ```
 
+After the first successful scan, the device address is cached in `~/.config/hsd-light/config.json`. Subsequent commands will skip scanning and connect directly.
+
 ### Light Control
 
 ```bash
@@ -97,10 +99,18 @@ hsd query    # query current device state
 
 ### Specifying a Device Address
 
-If you already know the MAC address, skip scanning for a faster connection:
+Manually specify a MAC address (takes priority over cached address):
 
 ```bash
 hsd -a AA:BB:CC:DD:EE:FF light color blue
+```
+
+### Clearing Cached Address
+
+Clear the cached device address to force a re-scan on next use:
+
+```bash
+hsd forget
 ```
 
 ## SDK Usage
@@ -192,6 +202,7 @@ cli/
     ├── __main__.py        # python -m hsd_light
     ├── protocol.py        # Protocol layer — pure command builders, no dependencies
     ├── device.py          # Device layer — BLE connection management via bleak
+    ├── config.py          # Config layer — device address caching (~/.config/hsd-light/)
     └── cli.py             # CLI layer — click-based command-line tool
 ```
 

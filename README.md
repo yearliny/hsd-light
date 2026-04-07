@@ -51,6 +51,8 @@ hsd scan
 # Found: HSD Love Light  [AA:BB:CC:DD:EE:FF]
 ```
 
+首次扫描成功后，设备地址会自动缓存到 `~/.config/hsd-light/config.json`，后续命令将跳过扫描直连设备。
+
 ### 灯光控制
 
 ```bash
@@ -97,10 +99,18 @@ hsd query    # 查询设备当前状态
 
 ### 指定设备地址
 
-已知 MAC 地址时可跳过扫描，加快连接速度：
+手动指定 MAC 地址（优先于缓存）：
 
 ```bash
 hsd -a AA:BB:CC:DD:EE:FF light color blue
+```
+
+### 清除缓存地址
+
+清除已缓存的设备地址，下次使用时重新扫描：
+
+```bash
+hsd forget
 ```
 
 ## SDK 用法
@@ -190,6 +200,7 @@ cli/
     ├── __main__.py        # python -m hsd_light
     ├── protocol.py        # 协议层 — 纯字节命令构建，无外部依赖
     ├── device.py          # 设备层 — 基于 bleak 的 BLE 连接管理
+    ├── config.py          # 配置层 — 设备地址缓存 (~/.config/hsd-light/)
     └── cli.py             # CLI 层 — 基于 click 的命令行工具
 ```
 
