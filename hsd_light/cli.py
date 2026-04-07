@@ -77,7 +77,7 @@ async def _send_and_close(ctx: click.Context, data: bytes, label: str) -> None:
 def main(ctx: click.Context, address: str | None, timeout: float, verbose: bool):
     """Control an HSD Love Light BLE device from the command line."""
     logging.basicConfig(
-        level=logging.DEBUG if verbose else logging.INFO,
+        level=logging.DEBUG if verbose else logging.WARNING,
         format="%(levelname)-8s %(message)s",
     )
     ctx.ensure_object(dict)
