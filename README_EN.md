@@ -15,6 +15,14 @@ This project provides two layers:
 
 ## Installation
 
+From PyPI (recommended):
+
+```bash
+pip install hsd-light
+```
+
+Or from source (for development):
+
 ```bash
 cd cli
 pip install -e .

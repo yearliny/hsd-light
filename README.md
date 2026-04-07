@@ -15,6 +15,14 @@
 
 ## 安装
 
+从 PyPI 安装（推荐）：
+
+```bash
+pip install hsd-light
+```
+
+或从源码安装（开发用）：
+
 ```bash
 cd cli
 pip install -e .
