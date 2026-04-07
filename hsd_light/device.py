@@ -26,6 +26,7 @@ from bleak import BleakClient, BleakScanner
 from bleak.backends.characteristic import BleakGATTCharacteristic
 from bleak.backends.device import BLEDevice
 
+from hsd_light.config import load_address, save_address
 from hsd_light.protocol import HEADER, Command
 
 logger = logging.getLogger(__name__)
@@ -78,6 +79,7 @@ class HSDDevice:
             )
         logger.info("Found device: %s [%s]", device.name, device.address)
         self._ble_device = device
+        save_address(device.address)
         return device
 
     # ── Connection ────────────────────────────────────────────────────────

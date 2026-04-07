@@ -20,6 +20,7 @@ import sys
 
 import click
 
+from hsd_light.config import clear_address, load_address
 from hsd_light.device import HSDDevice
 from hsd_light.protocol import (
     ColorPreset,
@@ -80,7 +81,8 @@ def main(ctx: click.Context, address: str | None, timeout: float, verbose: bool)
         format="%(levelname)-8s %(message)s",
     )
     ctx.ensure_object(dict)
-    ctx.obj["address"] = address
+    # Use explicit --address first, then fall back to cached address
+    ctx.obj["address"] = address or load_address()
     ctx.obj["timeout"] = timeout
 
 
@@ -96,6 +98,15 @@ def scan(ctx: click.Context):
         click.echo(f"Found: {ble.name}  [{ble.address}]")
 
     _run(_scan())
+
+
+# ── forget ───────────────────────────────────────────────────────────────────
+
+@main.command()
+def forget():
+    """Clear the cached device address (force re-scan on next use)."""
+    clear_address()
+    click.echo("OK — cached device address cleared")
 
 
 # ── sync ─────────────────────────────────────────────────────────────────────
